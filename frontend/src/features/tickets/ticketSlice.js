@@ -27,7 +27,28 @@ export const createTicket = createAsyncThunk('tickets/create',
         // This gets sent as action.payload to extraReducer state.message
         return thunkAPI.rejectWithValue(message)
     }
-})
+    }
+)
+
+// Get user tickets
+export const getTickets = createAsyncThunk('tickets/getAll', 
+async (_, thunkAPI) => {
+    try {
+    const token = thunkAPI.getState().auth.user.token
+    return await ticketService.getTickets(token)
+} catch (error) {
+    const message = 
+    (error.response && 
+        error.response.data && 
+        error.response.data.message) || 
+        error.message || 
+        error.toString()
+
+    // This gets sent as action.payload to extraReducer state.message
+    return thunkAPI.rejectWithValue(message)
+}
+    }
+)
 
 
 export const ticketSlice = createSlice({
@@ -50,8 +71,24 @@ export const ticketSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            .addCase(getTickets.pending, (state) => {
+                state.isLoading = true
+            })
+            // Passing in action here due to getting data
+            .addCase(getTickets.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                // make sure plural tickets because we have single for another object
+                state.tickets = action.payload
+            })
+            .addCase(getTickets.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
-})
+}
+)
 
 export const { reset } = ticketSlice.actions
 export default ticketSlice.reducer
