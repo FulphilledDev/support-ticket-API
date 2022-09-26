@@ -24,6 +24,7 @@ export const createTicket = createAsyncThunk('tickets/create',
             error.message || 
             error.toString()
 
+        // This gets sent as action.payload to extraReducer state.message
         return thunkAPI.rejectWithValue(message)
     }
 })
@@ -36,7 +37,19 @@ export const ticketSlice = createSlice({
         reset: (state) => initialState
     },
     extraReducers: (builder) => {
-
+        builder
+            .addCase(createTicket.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(createTicket.fulfilled, (state) => {
+                state.isLoading = false
+                state.isSuccess = true
+            })
+            .addCase(createTicket.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
 })
 
