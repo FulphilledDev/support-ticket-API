@@ -70,6 +70,26 @@ async (ticketId, thunkAPI) => {
     }
 )
 
+// Close ticket
+export const closeTicket = createAsyncThunk('tickets/close', 
+async (ticketId, thunkAPI) => {
+    try {
+    const token = thunkAPI.getState().auth.user.token
+    return await ticketService.closeTicket(ticketId, token)
+} catch (error) {
+    const message = 
+    (error.response && 
+        error.response.data && 
+        error.response.data.message) || 
+        error.message || 
+        error.toString()
+
+    // This gets sent as action.payload to extraReducer state.message
+    return thunkAPI.rejectWithValue(message)
+}
+    }
+)
+
 
 export const ticketSlice = createSlice({
     name: 'ticket',
@@ -120,6 +140,12 @@ export const ticketSlice = createSlice({
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload
+            })
+            // Backend already took care of changing the status to closed...
+            // We are intentionally doing it on the front end so the page doesn't have to reload 
+            .addCase(closeTicket.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.tickets.map((ticket) => ticket._id === action.payload._id ? (ticket.status = 'closed') : ticket)
             })
     }
 }
