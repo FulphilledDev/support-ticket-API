@@ -106,6 +106,21 @@ export const ticketSlice = createSlice({
                 state.isError = true
                 state.message = action.payload
             })
+            .addCase(getTicket.pending, (state) => {
+                state.isLoading = true
+            })
+            // Passing in action here due to getting data
+            .addCase(getTicket.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                // make sure plural tickets because we have single for another object
+                state.ticket = action.payload
+            })
+            .addCase(getTicket.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
 }
 )
