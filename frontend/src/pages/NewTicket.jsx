@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { createTicket, reset } from '../features/tickets/ticketSlice'
 import Spinner from '../components/Spinner'
-import { is } from 'immer/dist/internal'
+import BackButton from '../components/BackButton'
+// import { is } from 'immer/dist/internal'
 
 function NewTicket() {
     // Get user from global state (with useSelector in redux)
@@ -45,6 +46,7 @@ function NewTicket() {
 
   return (
       <>
+          <BackButton url='/' />
           <section className="heading">
               <h1>Create New Ticket</h1>
               <p>Please fill out the form below</p>
