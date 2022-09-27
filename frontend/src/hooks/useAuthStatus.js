@@ -7,7 +7,7 @@ export const useAuthStatus = () => {
     const [checkingStatus, setCheckingStatus] = useState(true)
     
     // Getting the user through redux from node express app (backend)
-    const { user } = useSeleector((state) => state.auth)
+    const { user } = useSelector((state) => state.auth)
 
     useEffect(() => {
         if (user) {

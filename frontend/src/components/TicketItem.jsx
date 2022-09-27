@@ -14,3 +14,5 @@ function TicketItem({ticket}) {
     </div>
   )
 }
+
+export default TicketItem

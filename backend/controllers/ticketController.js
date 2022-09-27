@@ -151,7 +151,7 @@ const updateTicket = asyncHandler(async (req, res) => {
 })
 
 
-module.export = {
+module.exports = {
     getTickets,
     getTicket,
     createTicket,

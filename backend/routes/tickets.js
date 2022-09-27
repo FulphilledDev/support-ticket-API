@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { getTickets, getTicket, createTicket } = require('../controllers/ticketController')
+const { getTickets, getTicket, createTicket, deleteTicket, updateTicket } = require('../controllers/ticketController')
 
 const { protect } = require('../middleware/authMiddleware')
+
+// Re-route into note router
+const noteRouter = require('./notes')
+router.use(':/ticketId/notes', noteRouter)
 
 // Using 'route' allows us to chain on additional functions: '.get','.put', etc
 router
